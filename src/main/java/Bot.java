@@ -41,6 +41,7 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
+    // Creating reply keyboard
     public void setButton(SendMessage sendMessage) {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
@@ -55,8 +56,11 @@ public class Bot extends TelegramLongPollingBot {
         keyboardRowList.add(keyboardFirstRow);
         KeyboardRow keyboardSecondRow = new KeyboardRow();
         keyboardSecondRow.add(new KeyboardButton("\uD83D\uDC68\u200D✈️ Еврик"));
-        keyboardSecondRow.add(new KeyboardButton("/help"));
+        keyboardSecondRow.add(new KeyboardButton("\uD83D\uDD75️\u200D♂️ Досмотровые"));
         keyboardRowList.add(keyboardSecondRow);
+        KeyboardRow keyboardThirdRow = new KeyboardRow();
+        keyboardThirdRow.add(new KeyboardButton("/help"));
+        keyboardRowList.add(keyboardThirdRow);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
     }
 
@@ -111,6 +115,14 @@ public class Bot extends TelegramLongPollingBot {
                 case "\uD83D\uDC68\u200D✈️ Еврик":
                     try {
                         sendMsg(message, CalendarData.getData("10"));
+
+                    } catch (IOException | GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "\uD83D\uDD75️\u200D♂️ Досмотровые":
+                    try {
+                        sendMsg(message, CalendarData.getData("4"));
 
                     } catch (IOException | GeneralSecurityException e) {
                         e.printStackTrace();

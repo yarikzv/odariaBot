@@ -53,7 +53,7 @@ public class CalendarData {
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
-
+    // Getting calendar id from file
     private static String getCalendarId() {
         File file = new File("src/main/resources/gadata");
         Scanner sc = null;
@@ -72,7 +72,7 @@ public class CalendarData {
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();
-
+        // Create List of events (10 items)
         DateTime now = new DateTime(System.currentTimeMillis());
         Events events = service.events().list(CALENDAR_ID)
                 .setMaxResults(10)
@@ -85,6 +85,7 @@ public class CalendarData {
             return "Данные не найдены";
         } else {
             for (Event event : items) {
+                // if colorId of event equals parameters colorId
                 if (Objects.equals(event.getColorId(), colorId)) {
                     return event.getSummary() + "\n" + event.getDescription();
                 }
