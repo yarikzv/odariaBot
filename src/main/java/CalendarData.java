@@ -19,7 +19,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
+
 
 public class CalendarData {
     private static final String APPLICATION_NAME = "Google Calendar API Java Odaria Bot";
@@ -27,7 +27,7 @@ public class CalendarData {
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
     private static final String CREDENTIALS_FILE_PATH = "google-credentials.json";
-    private static final String CALENDAR_ID = getCalendarId();
+    private static final String CALENDAR_ID = "5tgp5putnoavft92qj6ru4ob8k@group.calendar.google.com";
 
     /**
      * Creates an authorized Credential object.
@@ -52,18 +52,6 @@ public class CalendarData {
                 .build();
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
-    }
-    // Getting calendar id from file
-    private static String getCalendarId() {
-        File file = new File("src/main/resources/gadata");
-        Scanner sc = null;
-        try {
-            sc = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found");
-        }
-        assert sc != null;
-        return sc.nextLine();
     }
 
     public static String getData(String colorId) throws IOException, GeneralSecurityException {
