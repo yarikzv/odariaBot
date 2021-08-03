@@ -1,5 +1,4 @@
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -7,26 +6,23 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class Bot extends TelegramLongPollingBot {
-    public static void main(String[] args) {
-        try {
-            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new Bot());
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+    private final String BOT_NAME;
+    private final String BOT_TOKEN;
+
+    public Bot(String bot_name, String bot_token) {
+        BOT_NAME = bot_name;
+        BOT_TOKEN = bot_token;
     }
+
 
     public void sendMsg(Message message, String text) {
         SendMessage sendMessage = new SendMessage();
@@ -67,20 +63,12 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "OdariaBot";
+        return BOT_NAME;
     }
 
     @Override
     public String getBotToken() {
-        File file = new File("src/main/resources/tbdata");
-        Scanner sc = null;
-        try {
-            sc = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found");
-        }
-        assert sc != null;
-        return sc.nextLine();
+        return BOT_TOKEN;
     }
 
     @Override
