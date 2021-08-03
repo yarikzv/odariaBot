@@ -39,16 +39,19 @@
     <dependencies>
         <dependency>
             <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-abilities</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
             <version>5.3.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.telegram/telegrambotsextensions -->
         <dependency>
             <groupId>org.telegram</groupId>
-            <artifactId>telegrambotsextensions</artifactId>
+            <artifactId>telegrambots-meta</artifactId>
             <version>5.3.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
