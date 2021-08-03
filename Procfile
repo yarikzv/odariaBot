@@ -1,1 +1,1 @@
-web: java -jar target/OdariaBot-1.0-jar-with-dependencies.jar
+worker: java -jar target/OdariaBot-1.0-jar-with-dependencies.jar
