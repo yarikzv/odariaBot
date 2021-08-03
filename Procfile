@@ -1,1 +1,1 @@
-worker: java  <OdariaApplication>
+worker: java  OdariaApplication
