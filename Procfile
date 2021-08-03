@@ -1,1 +1,1 @@
-worker: java  OdariaApplication.java
+worker: java -cp target/classes/:target/dependency/* OdariaApplication
