@@ -17,10 +17,25 @@
             <plugin>
                 <groupId>com.heroku.sdk</groupId>
                 <artifactId>heroku-maven-plugin</artifactId>
-                <version>3.0.3</version>
+                <version>3.0.4</version>
+                <configuration>
+                    <appName>odariabot</appName>
+                    <processTypes>
+                        <worker>java $JAVA_OPTS -cp target/classes:target/dependency/* com.example.Main</worker>
+                    </processTypes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>com.heroku.sdk</groupId>-->
+<!--                <artifactId>heroku-maven-plugin</artifactId>-->
+<!--                <version>3.0.3</version>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
     <dependencies>
         <dependency>
             <groupId>org.telegram</groupId>
