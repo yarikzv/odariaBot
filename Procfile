@@ -1,1 +1,1 @@
-worker: java  src.main.java.OdariaApplication
+worker: java  OdariaApplication.java
