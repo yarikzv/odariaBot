@@ -4,8 +4,6 @@
 *.iml
 *.iws
 
-
-
 # Maven
 log/
 
