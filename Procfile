@@ -1,1 +1,1 @@
-worker: java -jar target/OdariaBot-1.0.jar
+worker: java $JAVA_OPTS -cp target/classes:target/dependency/* OdariaApplication
