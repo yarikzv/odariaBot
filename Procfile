@@ -1,1 +1,1 @@
-worker: java ./target/classes:./target/dependency/* OdariaApplication
+worker: java $JAVA_OPTS -cp /target/classes:/target/dependency/* OdariaApplication
