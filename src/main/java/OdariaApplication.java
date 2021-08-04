@@ -5,11 +5,11 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import java.util.Map;
 
 public class OdariaApplication {
-    private static final Map<String, String> getenv = System.getenv();
+
     public static void main(String[] args) {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new Bot(getenv.get("BOT_NAME"), getenv.get("BOT_TOKEN")));
+            botsApi.registerBot(new Bot(System.getenv("BOT_NAME"), System.getenv("BOT_TOKEN")));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
