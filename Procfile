@@ -1,1 +1,1 @@
-worker: java $JAVA_OPTS OdariaApplication
+worker: java $JAVA_OPTS com.zvolinskiy.odariabot.OdariaApplication

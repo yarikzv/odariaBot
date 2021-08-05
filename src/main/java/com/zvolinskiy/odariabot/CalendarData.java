@@ -1,3 +1,5 @@
+package com.zvolinskiy.odariabot;
+
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -20,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 public class CalendarData {
-    private static final String APPLICATION_NAME = "Google Calendar API Java Odaria Bot";
+    private static final String APPLICATION_NAME = "Google Calendar API Java Odaria com.zvolinskiy.odariabot.Bot";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);

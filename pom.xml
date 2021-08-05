@@ -6,7 +6,7 @@
 
     <groupId>com.yarikzv</groupId>
     <artifactId>OdariaBot</artifactId>
-    <version>1.0</version>
+    <version>1</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -21,7 +21,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>fully.qualified.MainClass</mainClass>
+                            <mainClass>com.zvolinskiy.odariabot.OdariaApplication</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
