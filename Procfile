@@ -1,1 +1,1 @@
-worker: java $JAVA_OPTS com.zvolinskiy.odariabot.OdariaApplication
+worker: java -jar target/OdariaBot-1-jar-with-dependencies.jar
