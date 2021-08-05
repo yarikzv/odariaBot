@@ -26,7 +26,7 @@ public class CalendarData {
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
-    private static final String CREDENTIALS_FILE_PATH = "google-credentials.json";
+    private static final String CREDENTIALS_FILE_PATH = "/google-credentials.json";
     private static final String CALENDAR_ID = "5tgp5putnoavft92qj6ru4ob8k@group.calendar.google.com";
 
         /**
