@@ -39,7 +39,7 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    // Creating reply keyboard
+    // Creating a keyboard
     public void setButton(SendMessage sendMessage) {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
@@ -57,11 +57,22 @@ public class Bot extends TelegramLongPollingBot {
         keyboardSecondRow.add(new KeyboardButton("\uD83D\uDD75️\u200D♂️ Досмотровые"));
         keyboardRowList.add(keyboardSecondRow);
         KeyboardRow keyboardThirdRow = new KeyboardRow();
+        keyboardThirdRow.add(new KeyboardButton("☎️ Справка"));
         keyboardThirdRow.add(new KeyboardButton("/help"));
         keyboardRowList.add(keyboardThirdRow);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
     }
-
+    // deleting html-tags from Info
+    public String parsingInfo(String info) {
+        if (info.contains("<br>")) {
+            info = info.replaceAll("<br>", "\n");
+        }
+        if (info.contains("</a>")) {
+            info = info.replaceAll("</a>", "");
+        }
+        info = info.replaceAll("<a.*\">", "");
+        return info;
+    }
 
     @Override
     public String getBotUsername() {
@@ -122,6 +133,14 @@ public class Bot extends TelegramLongPollingBot {
                     sendMsg(message, "Этот бот поможет тебе узнать, кто сегодня на смене." +
                             " Выбери, какое подразделение тебя интересует, и получи информацию." +
                             " Если есть вопросы - пиши @yarikzv");
+                    break;
+                case "☎️ Справка":
+                    try {
+                        sendMsg(message, parsingInfo(CalendarData.getData("5")));
+
+                    } catch (IOException | GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     sendMsg(message, "Не понимаю \uD83E\uDDD0");
