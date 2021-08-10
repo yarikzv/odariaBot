@@ -21,6 +21,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+
 public class CalendarData {
     private static final String APPLICATION_NAME = "Google Calendar API Java Odaria com.zvolinskiy.odariabot.Bot";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
@@ -29,7 +30,7 @@ public class CalendarData {
     private static final String CREDENTIALS_FILE_PATH = "/google-credentials.json";
     private static final String CALENDAR_ID = "5tgp5putnoavft92qj6ru4ob8k@group.calendar.google.com";
 
-        /**
+    /**
      * Creates an authorized Credential object.
      *
      * @param HTTP_TRANSPORT The network HTTP Transport.
@@ -75,7 +76,11 @@ public class CalendarData {
             for (Event event : items) {
                 // if colorId of event equals parameters colorId
                 if (Objects.equals(event.getColorId(), colorId)) {
-                    return event.getSummary() + "\n" + event.getDescription();
+                    if (event.getDescription() != null){
+                        return event.getSummary() + "\n" + event.getDescription();
+                    }
+                    return event.getSummary();
+
                 }
             }
         }

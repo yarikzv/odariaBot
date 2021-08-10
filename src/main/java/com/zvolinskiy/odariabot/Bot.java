@@ -19,6 +19,15 @@ import java.util.List;
 public class Bot extends TelegramLongPollingBot {
     private final String BOT_NAME;
     private final String BOT_TOKEN;
+    //Button's name fields
+    private final String VMO_BUTTON = "\uD83D\uDC6E\u200D♀️ Смена ВМО-3";
+    private final String VIZ_BUTTON = "\uD83D\uDC68\u200D\uD83D\uDCBB Визировка";
+    private final String EVR_BUTTON = "\uD83D\uDC68\u200D✈️ Еврик";
+    private final String DOSM_BUTTON = "\uD83D\uDD75️\u200D♂️ Досмотровые";
+    private final String INFO_BUTTON = "☎️ Справка";
+    private final String HELP_BUTTON = "/help";
+    private final String DISP_BUTTON = "\uD83D\uDE9A Диспетчер ТГТ";
+
 
     public Bot(String bot_name, String bot_token) {
         BOT_NAME = bot_name;
@@ -49,21 +58,25 @@ public class Bot extends TelegramLongPollingBot {
 
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
         KeyboardRow keyboardFirstRow = new KeyboardRow();
-        keyboardFirstRow.add(new KeyboardButton("\uD83D\uDC6E\u200D♀️ Смена ВМО-3"));
-        keyboardFirstRow.add(new KeyboardButton("\uD83D\uDC68\u200D\uD83D\uDCBB Визировка"));
+        keyboardFirstRow.add(new KeyboardButton(VMO_BUTTON));
+        keyboardFirstRow.add(new KeyboardButton(VIZ_BUTTON));
         keyboardRowList.add(keyboardFirstRow);
         KeyboardRow keyboardSecondRow = new KeyboardRow();
-        keyboardSecondRow.add(new KeyboardButton("\uD83D\uDC68\u200D✈️ Еврик"));
-        keyboardSecondRow.add(new KeyboardButton("\uD83D\uDD75️\u200D♂️ Досмотровые"));
+        keyboardSecondRow.add(new KeyboardButton(EVR_BUTTON));
+        keyboardSecondRow.add(new KeyboardButton(DOSM_BUTTON));
         keyboardRowList.add(keyboardSecondRow);
         KeyboardRow keyboardThirdRow = new KeyboardRow();
-        keyboardThirdRow.add(new KeyboardButton("☎️ Справка"));
-        keyboardThirdRow.add(new KeyboardButton("/help"));
+        keyboardThirdRow.add(new KeyboardButton(INFO_BUTTON));
+        keyboardThirdRow.add(new KeyboardButton(DISP_BUTTON));
         keyboardRowList.add(keyboardThirdRow);
+        KeyboardRow keyboardForthRow = new KeyboardRow();
+        //keyboardForthRow.add(new KeyboardButton(INFO_BUTTON));
+        keyboardForthRow.add(new KeyboardButton(HELP_BUTTON));
+        keyboardRowList.add(keyboardForthRow);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
     }
-    // deleting html-tags from Info
-    public String parsingInfo(String info) {
+    // deleting html-tags from Description field
+    public String formattingOfDescriptionField(String info) {
         if (info.contains("<br>")) {
             info = info.replaceAll("<br>", "\n");
         }
@@ -94,18 +107,21 @@ public class Bot extends TelegramLongPollingBot {
                     sendMsg(message, "Добро пожаловать! \nВыбери раздел на кнопках внизу, " +
                             "и узнай, кто сегодня на смене.");
                     break;
-                case "\uD83D\uDC6E\u200D♀️ Смена ВМО-3":
+                case VMO_BUTTON:
                     try {
+                        // ColorID: 3 - color Grape
                         sendMsg(message, CalendarData.getData("3"));
 
                     } catch (IOException | GeneralSecurityException e) {
                         e.printStackTrace();
                     }
                     break;
-                case "\uD83D\uDC68\u200D\uD83D\uDCBB Визировка":
+                case VIZ_BUTTON:
                     try {
+                        // ColorID: 8 - color Graphite
                         sendMsg(message, CalendarData.getData("8"));
                         if (!day.equals("SATURDAY") && !day.equals("SUNDAY")) {
+                            // ColorID: 2 - color Sage
                             sendMsg(message, CalendarData.getData("2"));
                         }
 
@@ -113,34 +129,46 @@ public class Bot extends TelegramLongPollingBot {
                         e.printStackTrace();
                     }
                     break;
-                case "\uD83D\uDC68\u200D✈️ Еврик":
+                case EVR_BUTTON:
                     try {
+                        // ColorID: 10 - color Basil
                         sendMsg(message, CalendarData.getData("10"));
 
                     } catch (IOException | GeneralSecurityException e) {
                         e.printStackTrace();
                     }
                     break;
-                case "\uD83D\uDD75️\u200D♂️ Досмотровые":
+                case DOSM_BUTTON:
                     try {
+                        // ColorID: 4 - color Flamingo
                         sendMsg(message, CalendarData.getData("4"));
 
                     } catch (IOException | GeneralSecurityException e) {
                         e.printStackTrace();
                     }
                     break;
-                case "/help":
-                    sendMsg(message, "Этот бот поможет тебе узнать, кто сегодня на смене." +
-                            " Выбери, какое подразделение тебя интересует, и получи информацию." +
-                            " Если есть вопросы - пиши @yarikzv");
-                    break;
-                case "☎️ Справка":
+                case INFO_BUTTON:
                     try {
-                        sendMsg(message, parsingInfo(CalendarData.getData("5")));
+                        // ColorID: 5 - color Banana
+                        sendMsg(message, formattingOfDescriptionField(CalendarData.getData("5")));
 
                     } catch (IOException | GeneralSecurityException e) {
                         e.printStackTrace();
                     }
+                    break;
+                case DISP_BUTTON:
+                    try {
+                        // ColorID: 9 - color Blueberry  !!!
+                        sendMsg(message, CalendarData.getData("9"));
+
+                    } catch (IOException | GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case HELP_BUTTON:
+                    sendMsg(message, "Этот бот поможет тебе узнать, кто сегодня на смене." +
+                            " Выбери, какое подразделение тебя интересует, и получи информацию." +
+                            " Если есть вопросы - пиши @yarikzv");
                     break;
                 default:
                     sendMsg(message, "Не понимаю \uD83E\uDDD0");
