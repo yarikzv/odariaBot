@@ -2,10 +2,14 @@ package com.zvolinskiy.odariabot;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -14,7 +18,9 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static com.zvolinskiy.odariabot.Container.*;
 
@@ -27,8 +33,8 @@ public class Bot extends TelegramLongPollingBot {
     private final String VIZ_BUTTON = "\uD83D\uDC68\u200D\uD83D\uDCBB Визировка";
     private final String EVR_BUTTON = "\uD83D\uDC68\u200D✈️ Еврик";
     private final String DOSM_BUTTON = "\uD83D\uDD75️\u200D♂️ Досмотровые";
-    private final String DISP_BUTTON = "\uD83D\uDE9A Диспетчер ТГТ";
-    private final String CONT_BUTTON = "Проверить контейнер";
+    private final String DISP_BUTTON = "\uD83D\uDC77\u200D♂️ Диспетчер ТГТ";
+    private final String CONT_BUTTON = "\uD83D\uDE9A Проверить контейнер";
     private final String INFO_BUTTON = "☎️ Справка";
     private final String HELP_BUTTON = "/help";
 
@@ -55,18 +61,6 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public void contNumber(Message message) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(message.getChatId().toString());
-        sendMessage.setText("Введите номер контейнера: ");
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     // Creating a keyboard
     public void setButton(SendMessage sendMessage) {
@@ -90,7 +84,7 @@ public class Bot extends TelegramLongPollingBot {
         keyboardThirdRow.add(new KeyboardButton(INFO_BUTTON));
         keyboardRowList.add(keyboardThirdRow);
         KeyboardRow keyboardForthRow = new KeyboardRow();
-        //keyboardForthRow.add(new KeyboardButton(CONT_BUTTON));
+        keyboardForthRow.add(new KeyboardButton(CONT_BUTTON));
         keyboardForthRow.add(new KeyboardButton(HELP_BUTTON));
         keyboardRowList.add(keyboardForthRow);
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
@@ -122,7 +116,17 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         String day = LocalDate.now().getDayOfWeek().name();
         Message message = update.getMessage();
+        //If message contains container number checking is present on terminal
+        if (update.hasMessage() && message.getText().matches("[A-Za-z]{4}\\d{7}")) {
+            try {
+                sendMsg(message, bkpDataProcessing(getDataFromSites(BKP_URL, message.getText())));
+                sendMsg(message, ctoDataProcessing(getDataFromSites(CTO_URL, message.getText())));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         if (message != null && message.hasText()) {
+
             switch (message.getText()) {
                 case "/start":
                     sendMsg(message, "Добро пожаловать! \nВыбери раздел на кнопках внизу, " +
@@ -186,20 +190,17 @@ public class Bot extends TelegramLongPollingBot {
                         e.printStackTrace();
                     }
                     break;
-//                case CONT_BUTTON:
-//                    //sendMsg(message, "Введите номер контейнера");
-//                    contNumber(message);
-//
-//
-//                    try {
-//                        sendMsg(message, getDataFromSites(BKP_URL, message.getText())
-//                                + getDataFromSites(CTO_URL, message.getText()));
-//                    } catch (IOException e) {
-//                        System.out.println("Данные не найдены");
-//                        ;
-//                    }
-//
-//                    break;
+                case CONT_BUTTON:
+                    try {
+                        execute(SendMessage.builder()
+                                .text("Введите номер контейнера:")
+                                .chatId(message.getChatId().toString())
+                                .build());
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+
+                    break;
                 case HELP_BUTTON:
                     try {
                         // ColorID: 1 - color "Peacock"
@@ -208,9 +209,6 @@ public class Bot extends TelegramLongPollingBot {
                     } catch (IOException | GeneralSecurityException e) {
                         e.printStackTrace();
                     }
-                    break;
-                default:
-                    sendMsg(message, "Не понимаю \uD83E\uDDD0");
                     break;
             }
         }

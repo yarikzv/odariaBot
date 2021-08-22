@@ -43,6 +43,7 @@
             </plugin>
         </plugins>
     </build>
+
     <dependencies>
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -84,6 +85,7 @@
             <artifactId>google-api-services-calendar</artifactId>
             <version>v3-rev305-1.23.0</version>
         </dependency>
+
     </dependencies>
 
 </project>
