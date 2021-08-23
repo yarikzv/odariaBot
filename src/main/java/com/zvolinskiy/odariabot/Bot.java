@@ -2,14 +2,9 @@ package com.zvolinskiy.odariabot;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -20,7 +15,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static com.zvolinskiy.odariabot.Container.*;
 
@@ -71,22 +65,26 @@ public class Bot extends TelegramLongPollingBot {
         replyKeyboardMarkup.setOneTimeKeyboard(false);
 
         List<KeyboardRow> keyboardRowList = new ArrayList<>();
-        KeyboardRow keyboardFirstRow = new KeyboardRow();
-        keyboardFirstRow.add(new KeyboardButton(VMO_BUTTON));
-        keyboardFirstRow.add(new KeyboardButton(VIZ_BUTTON));
-        keyboardRowList.add(keyboardFirstRow);
-        KeyboardRow keyboardSecondRow = new KeyboardRow();
-        keyboardSecondRow.add(new KeyboardButton(EVR_BUTTON));
-        keyboardSecondRow.add(new KeyboardButton(DOSM_BUTTON));
-        keyboardRowList.add(keyboardSecondRow);
-        KeyboardRow keyboardThirdRow = new KeyboardRow();
-        keyboardThirdRow.add(new KeyboardButton(DISP_BUTTON));
-        keyboardThirdRow.add(new KeyboardButton(INFO_BUTTON));
-        keyboardRowList.add(keyboardThirdRow);
-        KeyboardRow keyboardForthRow = new KeyboardRow();
-        keyboardForthRow.add(new KeyboardButton(CONT_BUTTON));
-        keyboardForthRow.add(new KeyboardButton(HELP_BUTTON));
-        keyboardRowList.add(keyboardForthRow);
+        keyboardRowList.add(
+                new KeyboardRow(
+                        Arrays.asList(
+                                new KeyboardButton(VMO_BUTTON),
+                                new KeyboardButton(VIZ_BUTTON))));
+        keyboardRowList.add(
+                new KeyboardRow(
+                        Arrays.asList(
+                                new KeyboardButton(EVR_BUTTON),
+                                new KeyboardButton(DOSM_BUTTON))));
+        keyboardRowList.add(
+                new KeyboardRow(
+                        Arrays.asList(
+                                new KeyboardButton(DISP_BUTTON),
+                                new KeyboardButton(CONT_BUTTON))));
+        keyboardRowList.add(
+                new KeyboardRow(
+                        Arrays.asList(
+                                new KeyboardButton(INFO_BUTTON),
+                                new KeyboardButton(HELP_BUTTON))));
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
     }
 
@@ -116,11 +114,12 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         String day = LocalDate.now().getDayOfWeek().name();
         Message message = update.getMessage();
-        //If message contains container number checking is present on terminal
+        //If the message  contains container number, checking present on terminal
         if (update.hasMessage() && message.getText().matches("[A-Za-z]{4}\\d{7}")) {
+            String containerId = message.getText();
             try {
-                sendMsg(message, bkpDataProcessing(getDataFromSites(BKP_URL, message.getText())));
-                sendMsg(message, ctoDataProcessing(getDataFromSites(CTO_URL, message.getText())));
+                sendMsg(message, bkpDataProcessing(getDataFromSites(BKP_URL, containerId)));
+                sendMsg(message, ctoDataProcessing(getDataFromSites(CTO_URL, containerId)));
             } catch (IOException e) {
                 e.printStackTrace();
             }

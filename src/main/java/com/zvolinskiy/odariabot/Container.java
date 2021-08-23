@@ -17,15 +17,6 @@ import java.util.List;
 public class Container {
     private static final int CONNECTION_TIMEOUT = 1000;
 
-
-    public static void main(String[] args) throws IOException {
-        String ctoUrl = "http://cto.od.ua/ru/rep/a.pub/ispresent.html?cont_no=";
-        String bkpUrl = "https://bkport.com/ru/ajax/container-search/";
-        String containerId = "ZCSU2365588";
-        System.out.println(bkpDataProcessing(getDataFromSites(bkpUrl, containerId)));
-        System.out.println(ctoDataProcessing(getDataFromSites(ctoUrl, containerId)));
-    }
-
     public static String getDataFromSites(String siterUrl, String containerId) throws IOException {
         final URL url = new URL(siterUrl + containerId);
         final HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -56,7 +47,7 @@ public class Container {
         for (Element element : contTable.select("td")) {
             contTableData.add(element.text());
         }
-        if (contTableData.size() < 6) {
+        if (contTableData.size() > 6) {
             String container = contTableData.get(6);
             String contType = contTableData.get(7);
             String contStatus = contTableData.get(9);
