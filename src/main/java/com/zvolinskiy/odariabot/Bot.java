@@ -28,15 +28,14 @@ public class Bot extends TelegramLongPollingBot {
     private final String BOT_TOKEN;
 
     // Constants for buttons
-    private static final String START_BUTTON = "/start";
-    private static final String VMO_BUTTON = "\uD83D\uDC6E\u200D♀️ Смена ВМО-3";
-    private static final String VIZ_BUTTON = "\uD83D\uDC68\u200D\uD83D\uDCBB Визировка";
-    private static final String EVR_BUTTON = "\uD83D\uDC68\u200D✈️ Еврик";
-    private static final String DOSM_BUTTON = "\uD83D\uDD75️\u200D♂️ Досмотровые";
-    private static final String DISP_BUTTON = "\uD83D\uDC77\u200D♂️ Диспетчер, учётки";
-    private static final String CONT_BUTTON = "\uD83D\uDE9A Проверить контейнер";
-    private static final String INFO_BUTTON = "\uD83D\uDCDE Справка";
-    private static final String HELP_BUTTON = "❓ Помощь";
+    private final String VMO_BUTTON = "\uD83D\uDC6E\u200D♀️ Смена ВМО-3";
+    private final String VIZ_BUTTON = "\uD83D\uDC68\u200D\uD83D\uDCBB Визировка";
+    private final String EVR_BUTTON = "\uD83D\uDC68\u200D✈️ Еврик";
+    private final String DOSM_BUTTON = "\uD83D\uDD75️\u200D♂️ Досмотровые";
+    private final String DISP_BUTTON = "\uD83D\uDC77\u200D♂️ Диспетчер, учётки";
+    private final String CONT_BUTTON = "\uD83D\uDE9A Проверить контейнер";
+    private final String INFO_BUTTON = "\uD83D\uDCDE Справка";
+    private final String HELP_BUTTON = "❓ Помощь";
 
     // Constants for URLs of sites
     private static final String CTO_URL = "http://cto.od.ua/ru/rep/a.pub/ispresent.html?cont_no=";
@@ -144,7 +143,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         if (message != null && message.hasText()) {
             switch (message.getText()) {
-                case START_BUTTON:
+                case "/start":
                     sendMsg(message, "Добро пожаловать! \nВыбери раздел на кнопках внизу, " +
                             "и узнай, кто сегодня на смене.");
                     break;
