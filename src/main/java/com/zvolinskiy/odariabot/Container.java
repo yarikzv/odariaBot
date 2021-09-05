@@ -16,29 +16,47 @@ import java.util.List;
 
 public class Container {
     private static final int CONNECTION_TIMEOUT = 1000;
+    /**
+     * Creates connection to sites http://cto.od.ua/ and https://bkport.com/ and
+     * gets data from sites.
+     *
+     * @param siteUrl The URL of page that gives a container status.
+     * @param containerId The number of container.
+     * @return String with data.
+     * @throws IOException If cannot to read data from input stream.
+     * */
+    public static String getDataFromSites(String siteUrl, String containerId) throws IOException {
+        final URL url = new URL(siteUrl + containerId);
+        final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-    public static String getDataFromSites(String siterUrl, String containerId) throws IOException {
-        final URL url = new URL(siterUrl + containerId);
-        final HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setConnectTimeout(CONNECTION_TIMEOUT);
-        con.setReadTimeout(CONNECTION_TIMEOUT);
-
-        try (final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "windows-1251"))) {
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setConnectTimeout(CONNECTION_TIMEOUT);
+        connection.setReadTimeout(CONNECTION_TIMEOUT);
+        // Reading Input Stream and collecting data by StringBuilder
+        try (final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(),
+                "windows-1251"))) {
             String inputLine;
             final StringBuilder content = new StringBuilder();
             while ((inputLine = in.readLine()) != null) {
                 content.append(inputLine);
             }
-
             return content.toString();
         } catch (final Exception ex) {
             return "Данные не найдены";
         }
     }
 
+    /**
+     * Gets data from site http://cto.od.ua/.
+     * The site is old and uses table layout without CSS.
+     * So I need to use Jsoup to parse data from page.
+     * If container is present on terminal the table has second row
+     * with information about container.
+     *
+     * @param data Uses String data from getDataFromSites() method.
+     * @return String with container state.
+     * */
     public static String ctoDataProcessing(String data) {
         Document document = Jsoup.parse(data);
         Elements contTable = document.select("table.scl");
@@ -55,9 +73,16 @@ public class Container {
         } else {
             return "Терминал \"КТО\": Контейнер не найден";
         }
-
     }
 
+    /**
+     * Gets data from site https://bkport.com/.
+     * The page returns data in json format, so I use class ContainerBkp member
+     * and JSONObject to processing data.
+     *
+     * @param data Uses String data from getDataFromSites() method.
+     * @return String with container state.
+     * */
     public static String bkpDataProcessing(String data) {
         ContainerBkp containerBkp = new ContainerBkp();
         JSONObject object = new JSONObject(data);

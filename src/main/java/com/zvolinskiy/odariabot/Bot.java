@@ -18,30 +18,40 @@ import java.util.List;
 
 import static com.zvolinskiy.odariabot.Container.*;
 
-
+/**
+ * The Bot class. Creates keyboard, processes incoming messages and sends data to user.
+ */
 public class Bot extends TelegramLongPollingBot {
+
+    // Getting Bot credentials from environment variables
     private final String BOT_NAME;
     private final String BOT_TOKEN;
-    //Button's name fields
-    private final String VMO_BUTTON = "\uD83D\uDC6E\u200D♀️ Смена ВМО-3";
-    private final String VIZ_BUTTON = "\uD83D\uDC68\u200D\uD83D\uDCBB Визировка";
-    private final String EVR_BUTTON = "\uD83D\uDC68\u200D✈️ Еврик";
-    private final String DOSM_BUTTON = "\uD83D\uDD75️\u200D♂️ Досмотровые";
-    private final String DISP_BUTTON = "\uD83D\uDC77\u200D♂️ Диспетчер ТГТ";
-    private final String CONT_BUTTON = "\uD83D\uDE9A Проверить контейнер";
-    private final String INFO_BUTTON = "☎️ Справка";
-    private final String HELP_BUTTON = "/help";
 
+    // Constants for buttons
+    private static final String START_BUTTON = "/start";
+    private static final String VMO_BUTTON = "\uD83D\uDC6E\u200D♀️ Смена ВМО-3";
+    private static final String VIZ_BUTTON = "\uD83D\uDC68\u200D\uD83D\uDCBB Визировка";
+    private static final String EVR_BUTTON = "\uD83D\uDC68\u200D✈️ Еврик";
+    private static final String DOSM_BUTTON = "\uD83D\uDD75️\u200D♂️ Досмотровые";
+    private static final String DISP_BUTTON = "\uD83D\uDC77\u200D♂️ Диспетчер, учётки";
+    private static final String CONT_BUTTON = "\uD83D\uDE9A Проверить контейнер";
+    private static final String INFO_BUTTON = "\uD83D\uDCDE Справка";
+    private static final String HELP_BUTTON = "❓ Помощь";
+
+    // Constants for URLs of sites
     private static final String CTO_URL = "http://cto.od.ua/ru/rep/a.pub/ispresent.html?cont_no=";
     private static final String BKP_URL = "https://bkport.com/ru/ajax/container-search/";
-
 
     public Bot(String bot_name, String bot_token) {
         BOT_NAME = bot_name;
         BOT_TOKEN = bot_token;
     }
 
-
+    /**
+     * Creates and sends message in response to a button click.
+     * @param message A message from button.
+     * @param text A text in response.
+     */
     public void sendMsg(Message message, String text) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
@@ -55,8 +65,11 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-
-    // Creating a keyboard
+    /**
+     * Creates a keyboard by ReplyKeyboard.
+     *
+     * @param sendMessage Creates keyboard in response to a message send.
+     */
     public void setButton(SendMessage sendMessage) {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
@@ -88,7 +101,12 @@ public class Bot extends TelegramLongPollingBot {
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
     }
 
-    // deleting html-tags from Description field
+    /**
+     * Formats description field by deleting html-tags.
+     *
+     * @param info A data from field
+     * @return A formatted data
+     */
     public String formattingOfDescriptionField(String info) {
         if (info.contains("<br>")) {
             info = info.replaceAll("<br>", "\n");
@@ -125,16 +143,15 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
         if (message != null && message.hasText()) {
-
             switch (message.getText()) {
-                case "/start":
+                case START_BUTTON:
                     sendMsg(message, "Добро пожаловать! \nВыбери раздел на кнопках внизу, " +
                             "и узнай, кто сегодня на смене.");
                     break;
                 case VMO_BUTTON:
                     try {
                         // ColorID: 3 - color "Grape"
-                        sendMsg(message, CalendarData.getData("3"));
+                        sendMsg(message, CalendarData.getDataFromCalendar("3"));
 
                     } catch (IOException | GeneralSecurityException e) {
                         e.printStackTrace();
@@ -143,10 +160,10 @@ public class Bot extends TelegramLongPollingBot {
                 case VIZ_BUTTON:
                     try {
                         // ColorID: 8 - color "Graphite"
-                        sendMsg(message, CalendarData.getData("8"));
+                        sendMsg(message, CalendarData.getDataFromCalendar("8"));
                         if (!day.equals("SATURDAY") && !day.equals("SUNDAY")) {
                             // ColorID: 2 - color "Sage"
-                            sendMsg(message, CalendarData.getData("2"));
+                            sendMsg(message, CalendarData.getDataFromCalendar("2"));
                         }
 
                     } catch (IOException | GeneralSecurityException e) {
@@ -156,7 +173,7 @@ public class Bot extends TelegramLongPollingBot {
                 case EVR_BUTTON:
                     try {
                         // ColorID: 10 - color "Basil"
-                        sendMsg(message, CalendarData.getData("10"));
+                        sendMsg(message, CalendarData.getDataFromCalendar("10"));
 
                     } catch (IOException | GeneralSecurityException e) {
                         e.printStackTrace();
@@ -165,7 +182,7 @@ public class Bot extends TelegramLongPollingBot {
                 case DOSM_BUTTON:
                     try {
                         // ColorID: 4 - color "Flamingo"
-                        sendMsg(message, CalendarData.getData("4"));
+                        sendMsg(message, CalendarData.getDataFromCalendar("4"));
 
                     } catch (IOException | GeneralSecurityException e) {
                         e.printStackTrace();
@@ -174,7 +191,7 @@ public class Bot extends TelegramLongPollingBot {
                 case INFO_BUTTON:
                     try {
                         // ColorID: 5 - color "Banana"
-                        sendMsg(message, formattingOfDescriptionField(CalendarData.getData("5")));
+                        sendMsg(message, formattingOfDescriptionField(CalendarData.getDataFromCalendar("5")));
 
                     } catch (IOException | GeneralSecurityException e) {
                         e.printStackTrace();
@@ -183,7 +200,7 @@ public class Bot extends TelegramLongPollingBot {
                 case DISP_BUTTON:
                     try {
                         // ColorID: 9 - color "Blueberry"  !!!
-                        sendMsg(message, CalendarData.getData("9"));
+                        sendMsg(message, formattingOfDescriptionField(CalendarData.getDataFromCalendar("9")));
 
                     } catch (IOException | GeneralSecurityException e) {
                         e.printStackTrace();
@@ -203,7 +220,7 @@ public class Bot extends TelegramLongPollingBot {
                 case HELP_BUTTON:
                     try {
                         // ColorID: 1 - color "Peacock"
-                        sendMsg(message, formattingOfDescriptionField(CalendarData.getData("7")));
+                        sendMsg(message, formattingOfDescriptionField(CalendarData.getDataFromCalendar("7")));
 
                     } catch (IOException | GeneralSecurityException e) {
                         e.printStackTrace();

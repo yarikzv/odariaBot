@@ -54,8 +54,13 @@ public class CalendarData {
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
-
-    public static String getData(String colorId) throws IOException, GeneralSecurityException {
+    /**
+     * Gets data from Google Calendar.
+     * @param colorId Event colorId.
+     * @return A data from calendar.
+     * @throws IOException If the events cannot be found.
+     * */
+    public static String getDataFromCalendar(String colorId) throws IOException, GeneralSecurityException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))

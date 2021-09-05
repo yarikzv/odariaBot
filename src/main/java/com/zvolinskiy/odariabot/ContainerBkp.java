@@ -1,5 +1,6 @@
 package com.zvolinskiy.odariabot;
 
+/** A class for processing json data from site https://bkport.com/ */
 public class ContainerBkp {
     private boolean searchStatus;
     private String statusText;
