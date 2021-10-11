@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Container {
-    private static final int CONNECTION_TIMEOUT = 1000;
+    private static final int CONNECTION_TIMEOUT = 5000;
     /**
      * Creates connection to sites http://cto.od.ua/ and https://bkport.com/ and
      * gets data from sites.
@@ -43,6 +43,7 @@ public class Container {
             }
             return content.toString();
         } catch (final Exception ex) {
+            ex.printStackTrace();
             return "Данные не найдены";
         }
     }
