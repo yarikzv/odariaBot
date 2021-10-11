@@ -85,21 +85,25 @@ public class Container {
      * @return String with container state.
      * */
     public static String bkpDataProcessing(String data) {
-        ContainerBkp containerBkp = new ContainerBkp();
-        JSONObject object = new JSONObject(data);
-        JSONObject resultTag = object.getJSONObject("result");
-        containerBkp.setSearchStatus(resultTag.getBoolean("searchStatus"));
-        containerBkp.setStatusText(resultTag.getString("statusText"));
-        containerBkp.setContainerId(resultTag.getString("containerId"));
-        if (containerBkp.isSearchStatus()) {
-            containerBkp.setArrivalDate(resultTag.getString("arrivalDate"));
-            return "Терминал \"БКП\": " + containerBkp.getContainerId() + " - "
-                    + containerBkp.getStatusText()
-                    + ".\nПрибытие: "
-                    + containerBkp.getArrivalDate().replaceAll("<div>", " ").replaceAll("</div>", "");
+        if (!data.equals("Данные не найдены")){
+            ContainerBkp containerBkp = new ContainerBkp();
+            JSONObject object = new JSONObject(data);
+            JSONObject resultTag = object.getJSONObject("result");
+            containerBkp.setSearchStatus(resultTag.getBoolean("searchStatus"));
+            containerBkp.setStatusText(resultTag.getString("statusText"));
+            containerBkp.setContainerId(resultTag.getString("containerId"));
+            if (containerBkp.isSearchStatus()) {
+                containerBkp.setArrivalDate(resultTag.getString("arrivalDate"));
+                return "Терминал \"БКП\": " + containerBkp.getContainerId() + " - "
+                        + containerBkp.getStatusText()
+                        + ".\nПрибытие: "
+                        + containerBkp.getArrivalDate().replaceAll("<div>", " ").replaceAll("</div>", "");
+            } else {
+                return "Терминал \"БКП\": " + containerBkp.getContainerId() + " - "
+                        + containerBkp.getStatusText();
+            }
         } else {
-            return "Терминал \"БКП\": " + containerBkp.getContainerId() + " - "
-                    + containerBkp.getStatusText();
+            return "Ошибка подключения к базе данных БКП. Попробуйте снова.";
         }
     }
 }
