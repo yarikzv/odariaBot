@@ -14,7 +14,6 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
  * @version 1.0.3
  * */
 public class OdariaApplication {
-
     public static void main(String[] args) {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
